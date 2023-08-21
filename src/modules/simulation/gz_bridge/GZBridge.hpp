@@ -50,6 +50,7 @@
 #include <uORB/topics/differential_pressure.h>
 #include <uORB/topics/sensor_accel.h>
 #include <uORB/topics/sensor_gyro.h>
+#include <uORB/topics/sensor_gps.h>
 #include <uORB/topics/vehicle_angular_velocity.h>
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_global_position.h>
@@ -64,6 +65,7 @@
 #include <gz/msgs/imu.pb.h>
 #include <gz/msgs/fluid_pressure.pb.h>
 #include <gz/msgs/odometry_with_covariance.pb.h>
+#include <gz/msgs/navsat.pb.h>
 
 using namespace time_literals;
 
@@ -100,6 +102,7 @@ private:
 	// void airspeedCallback(const gz::msgs::AirSpeedSensor &air_pressure);
 	void barometerCallback(const gz::msgs::FluidPressure &air_pressure);
 	void imuCallback(const gz::msgs::IMU &imu);
+	void navsatCallback(const gz::msgs::NavSat &navsat);
 	void poseInfoCallback(const gz::msgs::Pose_V &pose);
 	void odometryCallback(const gz::msgs::OdometryWithCovariance &odometry);
 
@@ -125,6 +128,7 @@ private:
 
 	uORB::PublicationMulti<sensor_accel_s> _sensor_accel_pub{ORB_ID(sensor_accel)};
 	uORB::PublicationMulti<sensor_gyro_s>  _sensor_gyro_pub{ORB_ID(sensor_gyro)};
+	uORB::PublicationMulti<sensor_gps_s>  _sensor_gps_pub{ORB_ID(sensor_gps)};
 	uORB::PublicationMulti<vehicle_odometry_s> _visual_odometry_pub{ORB_ID(vehicle_visual_odometry)};
 
 	GZMixingInterfaceESC   _mixing_interface_esc{_node, _node_mutex};

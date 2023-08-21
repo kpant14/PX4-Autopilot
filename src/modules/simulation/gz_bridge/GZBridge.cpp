@@ -38,6 +38,8 @@
 #include <lib/geo/geo.h>
 #include <lib/mathlib/mathlib.h>
 
+#include <drivers/drv_sensor.h>
+
 #include <px4_platform_common/getopt.h>
 
 #include <iostream>
@@ -153,11 +155,19 @@ int GZBridge::init()
 	}
 
 
-	// IMU: /world/$WORLD/model/$MODEL/link/base_link/sensor/imu_sensor/imu
+	// Odometry: /world/$WORLD/model/$MODEL/odometry_with_covariance
 	std::string odometry_topic = "/model/" + _model_name + "/odometry_with_covariance";
 
 	if (!_node.Subscribe(odometry_topic, &GZBridge::odometryCallback, this)) {
 		PX4_ERR("failed to subscribe to %s", odometry_topic.c_str());
+		return PX4_ERROR;
+	}
+
+	// NavSat: /world/$WORLD/model/$MODEL/link/base_link/sensor/navsat_sensor/navsat
+	std::string navsat_topic = "/world/" + _world_name + "/model/" + _model_name + "/link/base_link/sensor/navsat_sensor/navsat";
+
+	if (!_node.Subscribe(navsat_topic, &GZBridge::navsatCallback, this)) {
+		PX4_ERR("failed to subscribe to %s", navsat_topic.c_str());
 		return PX4_ERROR;
 	}
 
@@ -460,6 +470,66 @@ void GZBridge::imuCallback(const gz::msgs::IMU &imu)
 	sensor_gyro.samples = 1;
 	_sensor_gyro_pub.publish(sensor_gyro);
 
+	pthread_mutex_unlock(&_node_mutex);
+}
+
+void GZBridge::navsatCallback(const gz::msgs::NavSat &navsat)
+{
+	if (hrt_absolute_time() == 0) {
+		return;
+	}
+
+	pthread_mutex_lock(&_node_mutex);
+
+	const uint64_t time_us = (navsat.header().stamp().sec() * 1000000) + (navsat.header().stamp().nsec() / 1000);
+
+	if (time_us > _world_time_us.load()) {
+		updateClock(navsat.header().stamp().sec(), navsat.header().stamp().nsec());
+	}
+
+	// publish gps
+	sensor_gps_s sensor_gps{};
+	sensor_gps.device_id =11468804; // (Type: 0xAF, SIMULATION:0 (0x00))
+#if defined(ENABLE_LOCKSTEP_SCHEDULER)
+	sensor_gps.timestamp_sample = time_us;
+	sensor_gps.timestamp = time_us;
+#else
+	sensor_gps.timestamp_sample = hrt_absolute_time();
+	sensor_gps.timestamp = hrt_absolute_time();
+#endif
+	sensor_gps.fix_type = 3; // 3D fix
+	sensor_gps.s_variance_m_s = 0.4f;
+	sensor_gps.c_variance_rad = 0.1f;
+	sensor_gps.eph = 0.9f;
+	sensor_gps.epv = 1.78f;
+	sensor_gps.hdop = 0.7f;
+	sensor_gps.vdop = 1.1f;
+
+	sensor_gps.latitude_deg = navsat.latitude_deg();
+	sensor_gps.longitude_deg = navsat.longitude_deg();
+	sensor_gps.altitude_msl_m = navsat.altitude();
+	sensor_gps.altitude_ellipsoid_m = navsat.altitude();
+	sensor_gps.noise_per_ms = 0;
+	sensor_gps.jamming_indicator = 0;
+	sensor_gps.vel_m_s = sqrtf(
+			navsat.velocity_east() * navsat.velocity_east()
+			+ navsat.velocity_north() * navsat.velocity_north()
+			+ navsat.velocity_up() * navsat.velocity_up());
+	sensor_gps.vel_n_m_s = navsat.velocity_north();
+	sensor_gps.vel_e_m_s = navsat.velocity_east();
+	sensor_gps.vel_d_m_s = -navsat.velocity_up();
+	sensor_gps.cog_rad = atan2(navsat.velocity_east(), navsat.velocity_north());
+	sensor_gps.timestamp_time_relative = 0;
+	sensor_gps.heading = NAN;
+	sensor_gps.heading_offset = NAN;
+	sensor_gps.heading_accuracy = 0;
+	sensor_gps.automatic_gain_control = 0;
+	sensor_gps.jamming_state = 0;
+	sensor_gps.spoofing_state = 0;
+	sensor_gps.vel_ned_valid = true;
+	sensor_gps.satellites_used = 10;
+
+	_sensor_gps_pub.publish(sensor_gps);
 	pthread_mutex_unlock(&_node_mutex);
 }
 
