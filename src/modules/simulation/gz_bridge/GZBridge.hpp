@@ -65,7 +65,7 @@
 #include <gz/msgs/imu.pb.h>
 #include <gz/msgs/fluid_pressure.pb.h>
 #include <gz/msgs/odometry_with_covariance.pb.h>
-#include <gz/msgs/navsat.pb.h>
+#include <gz/msgs/navsat_multipath.pb.h>
 
 using namespace time_literals;
 
@@ -102,7 +102,7 @@ private:
 	// void airspeedCallback(const gz::msgs::AirSpeedSensor &air_pressure);
 	void barometerCallback(const gz::msgs::FluidPressure &air_pressure);
 	void imuCallback(const gz::msgs::IMU &imu);
-	void navsatCallback(const gz::msgs::NavSat &navsat);
+	void navsatCallback(const gz::msgs::NavSatMultipath &navsat);
 	void poseInfoCallback(const gz::msgs::Pose_V &pose);
 	void odometryCallback(const gz::msgs::OdometryWithCovariance &odometry);
 

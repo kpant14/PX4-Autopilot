@@ -164,7 +164,7 @@ int GZBridge::init()
 	}
 
 	// NavSat: /world/$WORLD/model/$MODEL/link/base_link/sensor/navsat_sensor/navsat
-	std::string navsat_topic = "/world/" + _world_name + "/model/" + _model_name + "/link/base_link/sensor/navsat_sensor/navsat";
+	std::string navsat_topic = "/world/" + _world_name + "/model/" + _model_name + "/link/base_link/sensor/navsat_sensor/navsat_multipath";
 
 	if (!_node.Subscribe(navsat_topic, &GZBridge::navsatCallback, this)) {
 		PX4_ERR("failed to subscribe to %s", navsat_topic.c_str());
@@ -473,7 +473,7 @@ void GZBridge::imuCallback(const gz::msgs::IMU &imu)
 	pthread_mutex_unlock(&_node_mutex);
 }
 
-void GZBridge::navsatCallback(const gz::msgs::NavSat &navsat)
+void GZBridge::navsatCallback(const gz::msgs::NavSatMultipath &navsat)
 {
 	if (hrt_absolute_time() == 0) {
 		return;
