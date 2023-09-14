@@ -487,49 +487,49 @@ void GZBridge::navsatCallback(const gz::msgs::NavSatMultipath &navsat)
 		updateClock(navsat.header().stamp().sec(), navsat.header().stamp().nsec());
 	}
 
-	// publish gps
-	sensor_gps_s sensor_gps{};
-	sensor_gps.device_id =11468804; // (Type: 0xAF, SIMULATION:0 (0x00))
-#if defined(ENABLE_LOCKSTEP_SCHEDULER)
-	sensor_gps.timestamp_sample = time_us;
-	sensor_gps.timestamp = time_us;
-#else
-	sensor_gps.timestamp_sample = hrt_absolute_time();
-	sensor_gps.timestamp = hrt_absolute_time();
-#endif
-	sensor_gps.fix_type = 3; // 3D fix
-	sensor_gps.s_variance_m_s = 0.4f;
-	sensor_gps.c_variance_rad = 0.1f;
-	sensor_gps.eph = 0.9f;
-	sensor_gps.epv = 1.78f;
-	sensor_gps.hdop = 0.7f;
-	sensor_gps.vdop = 1.1f;
+	// 	// publish gps
+	// 	sensor_gps_s sensor_gps{};
+	// 	sensor_gps.device_id =11468804; // (Type: 0xAF, SIMULATION:0 (0x00))
+	// #if defined(ENABLE_LOCKSTEP_SCHEDULER)
+	// 	sensor_gps.timestamp_sample = time_us;
+	// 	sensor_gps.timestamp = time_us;
+	// #else
+	// 	sensor_gps.timestamp_sample = hrt_absolute_time();
+	// 	sensor_gps.timestamp = hrt_absolute_time();
+	// #endif
+	// 	sensor_gps.fix_type = 3; // 3D fix
+	// 	sensor_gps.s_variance_m_s = 0.4f;
+	// 	sensor_gps.c_variance_rad = 0.1f;
+	// 	sensor_gps.eph = 0.9f;
+	// 	sensor_gps.epv = 1.78f;
+	// 	sensor_gps.hdop = 0.7f;
+	// 	sensor_gps.vdop = 1.1f;
 
-	sensor_gps.latitude_deg = navsat.latitude_deg();
-	sensor_gps.longitude_deg = navsat.longitude_deg();
-	sensor_gps.altitude_msl_m = navsat.altitude();
-	sensor_gps.altitude_ellipsoid_m = navsat.altitude();
-	sensor_gps.noise_per_ms = 0;
-	sensor_gps.jamming_indicator = 0;
-	sensor_gps.vel_m_s = sqrtf(
-			navsat.velocity_east() * navsat.velocity_east()
-			+ navsat.velocity_north() * navsat.velocity_north()
-			+ navsat.velocity_up() * navsat.velocity_up());
-	sensor_gps.vel_n_m_s = navsat.velocity_north();
-	sensor_gps.vel_e_m_s = navsat.velocity_east();
-	sensor_gps.vel_d_m_s = -navsat.velocity_up();
-	sensor_gps.cog_rad = atan2(navsat.velocity_east(), navsat.velocity_north());
-	sensor_gps.timestamp_time_relative = 0;
-	sensor_gps.heading = NAN;
-	sensor_gps.heading_offset = NAN;
-	sensor_gps.heading_accuracy = 0;
-	sensor_gps.automatic_gain_control = 0;
-	sensor_gps.jamming_state = 0;
-	sensor_gps.spoofing_state = 0;
-	sensor_gps.vel_ned_valid = true;
-	sensor_gps.satellites_used = 10;
+	// 	sensor_gps.latitude_deg = navsat.latitude_deg();
+	// 	sensor_gps.longitude_deg = navsat.longitude_deg();
+	// 	sensor_gps.altitude_msl_m = navsat.altitude();
+	// 	sensor_gps.altitude_ellipsoid_m = navsat.altitude();
+	// 	sensor_gps.noise_per_ms = 0;
+	// 	sensor_gps.jamming_indicator = 0;
+	// 	sensor_gps.vel_m_s = sqrtf(
+	// 			navsat.velocity_east() * navsat.velocity_east()
+	// 			+ navsat.velocity_north() * navsat.velocity_north()
+	// 			+ navsat.velocity_up() * navsat.velocity_up());
+	// 	sensor_gps.vel_n_m_s = navsat.velocity_north();
+	// 	sensor_gps.vel_e_m_s = navsat.velocity_east();
+	// 	sensor_gps.vel_d_m_s = -navsat.velocity_up();
+	// 	sensor_gps.cog_rad = atan2(navsat.velocity_east(), navsat.velocity_north());
+	// 	sensor_gps.timestamp_time_relative = 0;
+	// 	sensor_gps.heading = NAN;
+	// 	sensor_gps.heading_offset = NAN;
+	// 	sensor_gps.heading_accuracy = 0;
+	// 	sensor_gps.automatic_gain_control = 0;
+	// 	sensor_gps.jamming_state = 0;
+	// 	sensor_gps.spoofing_state = 0;
+	// 	sensor_gps.vel_ned_valid = true;
+	// 	sensor_gps.satellites_used = 10;
 
-	_sensor_gps_pub.publish(sensor_gps);
+	//_sensor_gps_pub.publish(sensor_gps);
 	pthread_mutex_unlock(&_node_mutex);
 }
 
