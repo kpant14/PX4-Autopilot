@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2015 Estimation and Control Library (ECL). All rights reserved.
+ *   Copyright (c) 2015-2023 PX4 Development Team. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -12,7 +12,7 @@
  *    notice, this list of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
- * 3. Neither the name ECL nor the names of its contributors may be
+ * 3. Neither the name PX4 nor the names of its contributors may be
  *    used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -91,6 +91,7 @@ enum class VelocityFrame : uint8_t {
 	BODY_FRAME_FRD  = 2
 };
 
+#if defined(CONFIG_EKF2_MAGNETOMETER)
 enum GeoDeclinationMask : uint8_t {
 	// Bit locations for mag_declination_source
 	USE_GEO_DECL  = (1<<0), ///< set to true to use the declination from the geo library when the GPS position becomes available, set to false to always use the EKF2_MAG_DECL value
@@ -104,13 +105,14 @@ enum MagFuseType : uint8_t {
 	HEADING = 1,   	///< Simple yaw angle fusion will always be used. This is less accurate, but less affected by earth field distortions. It should not be used for pitch angles outside the range from -60 to +60 deg
 	NONE    = 5    	///< Do not use magnetometer under any circumstance..
 };
+#endif // CONFIG_EKF2_MAGNETOMETER
 
-#if defined(CONFIG_EKF2_RANGE_FINDER)
+#if defined(CONFIG_EKF2_TERRAIN)
 enum TerrainFusionMask : uint8_t {
 	TerrainFuseRangeFinder = (1 << 0),
 	TerrainFuseOpticalFlow = (1 << 1)
 };
-#endif // CONFIG_EKF2_RANGE_FINDER
+#endif // CONFIG_EKF2_TERRAIN
 
 enum HeightSensor : uint8_t {
 	BARO  = 0,
@@ -269,17 +271,6 @@ struct systemFlagUpdate {
 	bool gnd_effect{false};
 };
 
-struct stateSample {
-	Quatf    quat_nominal{};        ///< quaternion defining the rotation from body to earth frame
-	Vector3f vel{};                 ///< NED velocity in earth frame in m/s
-	Vector3f pos{};                 ///< NED position in earth frame in m
-	Vector3f gyro_bias{};           ///< gyro bias estimate in rad/s
-	Vector3f accel_bias{};          ///< accel bias estimate in m/s^2
-	Vector3f mag_I{};               ///< NED earth magnetic field in gauss
-	Vector3f mag_B{};               ///< magnetometer bias estimate in body frame in gauss
-	Vector2f wind_vel{};            ///< horizontal wind velocity in earth frame in m/s
-};
-
 struct parameters {
 
 	int32_t filter_update_interval_us{10000}; ///< filter update interval in microseconds
@@ -295,7 +286,6 @@ struct parameters {
 	int32_t sensor_interval_max_ms{10};     ///< maximum time of arrival difference between non IMU sensor updates. Sets the size of the observation buffers. (mSec)
 
 	// measurement time delays
-	float mag_delay_ms{0.0f};               ///< magnetometer measurement delay relative to the IMU (mSec)
 	float baro_delay_ms{0.0f};              ///< barometer height measurement delay relative to the IMU (mSec)
 	float gps_delay_ms{110.0f};             ///< GPS measurement delay relative to the IMU (mSec)
 
@@ -306,16 +296,17 @@ struct parameters {
 	// process noise
 	float gyro_bias_p_noise{1.0e-3f};       ///< process noise for IMU rate gyro bias prediction (rad/sec**2)
 	float accel_bias_p_noise{1.0e-2f};      ///< process noise for IMU accelerometer bias prediction (m/sec**3)
-	float mage_p_noise{1.0e-3f};            ///< process noise for earth magnetic field prediction (Gauss/sec)
-	float magb_p_noise{1.0e-4f};            ///< process noise for body magnetic field prediction (Gauss/sec)
+
+#if defined(CONFIG_EKF2_WIND)
+	const float initial_wind_uncertainty{1.0f};     ///< 1-sigma initial uncertainty in wind velocity (m/sec)
 	float wind_vel_nsd{1.0e-2f};        ///< process noise spectral density for wind velocity prediction (m/sec**2/sqrt(Hz))
 	const float wind_vel_nsd_scaler{0.5f};      ///< scaling of wind process noise with vertical velocity
+#endif // CONFIG_EKF2_WIND
 
 	// initialization errors
 	float switch_on_gyro_bias{0.1f};        ///< 1-sigma gyro bias uncertainty at switch on (rad/sec)
 	float switch_on_accel_bias{0.2f};       ///< 1-sigma accelerometer bias uncertainty at switch on (m/sec**2)
 	float initial_tilt_err{0.1f};           ///< 1-sigma tilt error after initial alignment using gravity vector (rad)
-	const float initial_wind_uncertainty{1.0f};     ///< 1-sigma initial uncertainty in wind velocity (m/sec)
 
 	// position and velocity fusion
 	float gps_vel_noise{0.5f};           ///< minimum allowed observation noise for gps velocity fusion (m/sec)
@@ -330,16 +321,30 @@ struct parameters {
 	float gnd_effect_deadzone{5.0f};        ///< Size of deadzone applied to negative baro innovations when ground effect compensation is active (m)
 	float gnd_effect_max_hgt{0.5f};         ///< Height above ground at which baro ground effect becomes insignificant (m)
 
-	// magnetometer fusion
+	float heading_innov_gate{2.6f};         ///< heading fusion innovation consistency gate size (STD)
 	float mag_heading_noise{3.0e-1f};       ///< measurement noise used for simple heading fusion (rad)
+
+#if defined(CONFIG_EKF2_MAGNETOMETER)
+	float mag_delay_ms{0.0f};               ///< magnetometer measurement delay relative to the IMU (mSec)
+
+	float mage_p_noise{1.0e-3f};            ///< process noise for earth magnetic field prediction (Gauss/sec)
+	float magb_p_noise{1.0e-4f};            ///< process noise for body magnetic field prediction (Gauss/sec)
+
+	// magnetometer fusion
 	float mag_noise{5.0e-2f};               ///< measurement noise used for 3-axis magnetometer fusion (Gauss)
 	float mag_declination_deg{0.0f};        ///< magnetic declination (degrees)
-	float heading_innov_gate{2.6f};         ///< heading fusion innovation consistency gate size (STD)
 	float mag_innov_gate{3.0f};             ///< magnetometer fusion innovation consistency gate size (STD)
 	int32_t mag_declination_source{7};      ///< bitmask used to control the handling of declination data
 	int32_t mag_fusion_type{0};             ///< integer used to specify the type of magnetometer fusion used
 	float mag_acc_gate{0.5f};               ///< when in auto select mode, heading fusion will be used when manoeuvre accel is lower than this (m/sec**2)
 	float mag_yaw_rate_gate{0.20f};         ///< yaw rate threshold used by mode select logic (rad/sec)
+
+	// compute synthetic magnetomter Z value if possible
+	int32_t synthesize_mag_z{0};
+	int32_t mag_check{0};
+	float mag_check_strength_tolerance_gs{0.2f};
+	float mag_check_inclination_tolerance_deg{20.f};
+#endif // CONFIG_EKF2_MAGNETOMETER
 
 #if defined(CONFIG_EKF2_GNSS_YAW)
 	// GNSS heading fusion
@@ -362,18 +367,27 @@ struct parameters {
 	const float beta_avg_ft_us{150000.0f};  ///< The average time between synthetic sideslip measurements (uSec)
 #endif // CONFIG_EKF2_SIDESLIP
 
+#if defined(CONFIG_EKF2_TERRAIN)
+	int32_t terrain_fusion_mode{TerrainFusionMask::TerrainFuseRangeFinder |
+				    TerrainFusionMask::TerrainFuseOpticalFlow}; ///< aiding source(s) selection bitmask for the terrain estimator
+
+	float terrain_p_noise{5.0f};            ///< process noise for terrain offset (m/sec)
+	float terrain_gradient{0.5f};           ///< gradient of terrain used to estimate process noise due to changing position (m/m)
+	const float terrain_timeout{10.f};      ///< maximum time for invalid bottom distance measurements before resetting terrain estimate (s)
+#endif // CONFIG_EKF2_TERRAIN
+
+#if defined(CONFIG_EKF2_TERRAIN) || defined(CONFIG_EKF2_OPTICAL_FLOW) || defined(CONFIG_EKF2_RANGE_FINDER)
+	float rng_gnd_clearance{0.1f};          ///< minimum valid value for range when on ground (m)
+#endif // CONFIG_EKF2_TERRAIN || CONFIG_EKF2_OPTICAL_FLOW || CONFIG_EKF2_RANGE_FINDER
+
 #if defined(CONFIG_EKF2_RANGE_FINDER)
 	// range finder fusion
 	int32_t rng_ctrl{RngCtrl::CONDITIONAL};
-
-	int32_t terrain_fusion_mode{TerrainFusionMask::TerrainFuseRangeFinder |
-				    TerrainFusionMask::TerrainFuseOpticalFlow}; ///< aiding source(s) selection bitmask for the terrain estimator
 
 	float range_delay_ms{5.0f};             ///< range finder measurement delay relative to the IMU (mSec)
 	float range_noise{0.1f};                ///< observation noise for range finder measurements (m)
 	float range_innov_gate{5.0f};           ///< range finder fusion innovation consistency gate size (STD)
 	float rng_hgt_bias_nsd{0.13f};          ///< process noise for range height bias estimation (m/s/sqrt(Hz))
-	float rng_gnd_clearance{0.1f};          ///< minimum valid value for range when on ground (m)
 	float rng_sens_pitch{0.0f};             ///< Pitch offset of the range sensor (rad). Sensor points out along Z axis when offset is zero. Positive rotation is RH about Y axis.
 	float range_noise_scaler{0.0f};         ///< scaling from range measurement to noise (m/m)
 	const float vehicle_variance_scaler{0.0f};      ///< gain applied to vehicle height variance used in calculation of height above ground observation variance
@@ -385,11 +399,6 @@ struct parameters {
 	float range_kin_consistency_gate{1.0f}; ///< gate size used by the range finder kinematic consistency check
 
 	Vector3f rng_pos_body{};                ///< xyz position of range sensor in body frame (m)
-
-	float terrain_p_noise{5.0f};            ///< process noise for terrain offset (m/sec)
-	float terrain_gradient{0.5f};           ///< gradient of terrain used to estimate process noise due to changing position (m/m)
-	const float terrain_timeout{10.f};      ///< maximum time for invalid bottom distance measurements before resetting terrain estimate (s)
-
 #endif // CONFIG_EKF2_RANGE_FINDER
 
 #if defined(CONFIG_EKF2_EXTERNAL_VISION)
@@ -486,12 +495,6 @@ struct parameters {
 	const float auxvel_noise{0.5f};         ///< minimum observation noise, uses reported noise if greater (m/s)
 	const float auxvel_gate{5.0f};          ///< velocity fusion innovation consistency gate size (STD)
 #endif // CONFIG_EKF2_AUXVEL
-
-	// compute synthetic magnetomter Z value if possible
-	int32_t synthesize_mag_z{0};
-	int32_t mag_check{0};
-	float mag_check_strength_tolerance_gs{0.2f};
-	float mag_check_inclination_tolerance_deg{20.f};
 
 	// Parameters used to control when yaw is reset to the EKF-GSF yaw estimator value
 	float EKFGSF_tas_default{15.0f};                ///< default airspeed value assumed during fixed wing flight if no airspeed measurement available (m/s)
@@ -600,6 +603,7 @@ union filter_control_status_u {
 		uint64_t gravity_vector          : 1; ///< 34 - true when gravity vector measurements are being fused
 		uint64_t mag                     : 1; ///< 35 - true if 3-axis magnetometer measurement fusion (mag states only) is intended
 		uint64_t ev_yaw_fault            : 1; ///< 36 - true when the EV heading has been declared faulty and is no longer being used
+		uint64_t mag_heading_consistent  : 1; ///< 37 - true when the heading obtained from mag data is declared consistent with the filter
 
 	} flags;
 	uint64_t value;
@@ -624,7 +628,7 @@ union ekf_solution_status_u {
 	uint16_t value;
 };
 
-#if defined(CONFIG_EKF2_RANGE_FINDER)
+#if defined(CONFIG_EKF2_TERRAIN)
 union terrain_fusion_status_u {
 	struct {
 		bool range_finder : 1;  ///< 0 - true if we are fusing range finder data
@@ -632,7 +636,7 @@ union terrain_fusion_status_u {
 	} flags;
 	uint8_t value;
 };
-#endif // CONFIG_EKF2_RANGE_FINDER
+#endif // CONFIG_EKF2_TERRAIN
 
 // define structure used to communicate information events
 union information_event_status_u {
