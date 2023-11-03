@@ -359,7 +359,6 @@ MavlinkReceiver::handle_message(mavlink_message_t *msg)
 		switch (msg->msgid) {
 		case MAVLINK_MSG_ID_HIL_GPS:
 			handle_message_hil_gps(msg);
-			PX4_ERR("hil");
 			break;
 
 		default:
