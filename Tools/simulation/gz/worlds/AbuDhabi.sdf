@@ -114,181 +114,356 @@
         <falloff>0</falloff>
       </spot>
     </light>
-  <model name="camera_0">
-      <pose>10 10 10.0 0 0.0 -2.35</pose>
-      <static>1</static>
-      <link name="link">
-        <pose>0.1 0.05 0.05 0 0 0</pose>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.2 0.1 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5, 0, 0, 0</ambient>
-            <diffuse>1.0, 0, 0, 0</diffuse>
-            <emissive>1 1 1 1</emissive>
-          </material>
-        </visual>
-        <sensor name="camera_0" type="camera">
-          <camera>
-            <horizontal_fov>1.5</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>2000</far>
-            </clip>
-            <camera_info_topic>camera_0/info</camera_info_topic>
-          </camera>
-          <always_on>1</always_on>
-          <update_rate>30</update_rate>
-          <visualize>true</visualize>
-          <topic>camera_0/image</topic>
-        </sensor>
-      </link>
-    </model>
+    <model name="camera_0">
+        <pose>-17.0 10.0 10.0 0.0 0.75 0</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_0" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_0/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_0/image</topic>
+          </sensor>
+        </link>
+      </model>
 
-    <model name="camera_1">
-      <pose>-10 10 10.0 0 0.0 -0.78</pose>
-      <static>1</static>
-      <link name="link">
-        <pose>0.1 0.05 0.05 0 0 0</pose>
-        <inertial>
-          <mass>0.1</mass>
-          <inertia>
-            <ixx>0.000166667</ixx>
-            <iyy>0.000166667</iyy>
-            <izz>0.000166667</izz>
-          </inertia>
-        </inertial>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.2 0.1 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5, 0, 0, 0</ambient>
-            <diffuse>1.0, 0, 0, 0</diffuse>
-            <emissive>1 1 1 1</emissive>
-          </material>
-        </visual>
-        <sensor name="camera_1" type="camera">
-          <camera>
-            <horizontal_fov>1.5</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>2000</far>
-            </clip>
-            <camera_info_topic>camera_1/info</camera_info_topic>
-          </camera>
-          <always_on>1</always_on>
-          <update_rate>30</update_rate>
-          <visualize>true</visualize>
-          <topic>camera_1/image</topic>
-        </sensor>
-      </link>
-    </model>
+      <model name="camera_1">
+        <pose>25.0 94.0 30.0 0.0 0 -0.5</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_1" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_1/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_1/image</topic>
+          </sensor>
+        </link>
+      </model>
 
-    <model name="camera_2">
-      <pose>-10 -10 10.0 0 0.0 0.78</pose>
-      <static>1</static>
-      <link name="link">
-        <pose>0.1 0.05 0.05 0 0 0</pose>
-        <inertial>
-          <mass>0.1</mass>
-          <inertia>
-            <ixx>0.000166667</ixx>
-            <iyy>0.000166667</iyy>
-            <izz>0.000166667</izz>
-          </inertia>
-        </inertial>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.2 0.1 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5, 0, 0, 0</ambient>
-            <diffuse>1.0, 0, 0, 0</diffuse>
-            <emissive>1 1 1 1</emissive>
-          </material>
-        </visual>
-        <sensor name="camera_2" type="camera">
-          <camera>
-            <horizontal_fov>1.5</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>2000</far>
-            </clip>
-            <camera_info_topic>camera_2/info</camera_info_topic>
-          </camera>
-          <always_on>1</always_on>
-          <update_rate>30</update_rate>
-          <visualize>true</visualize>
-          <topic>camera_2/image</topic>
-        </sensor>
-      </link>
-    </model>
+      <model name="camera_2">
+        <pose>75.0 134.0 32.0 0 0.0 -0.5</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_2" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_2/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_2/image</topic>
+          </sensor>
+        </link>
+      </model>
 
-    <model name="camera_3">
-      <pose>10 -10 10.0 0 0.0 2.35</pose>
-      <static>1</static>
-      <link name="link">
-        <pose>0.1 0.05 0.05 0 0 0</pose>
-        <inertial>
-          <mass>0.1</mass>
-          <inertia>
-            <ixx>0.000166667</ixx>
-            <iyy>0.000166667</iyy>
-            <izz>0.000166667</izz>
-          </inertia>
-        </inertial>
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.2 0.1 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5, 0, 0, 0</ambient>
-            <diffuse>1.0, 0, 0, 0</diffuse>
-            <emissive>1 1 1 1</emissive>
-          </material>
-        </visual>
-        <sensor name="camera_3" type="camera">
-          <camera>
-            <horizontal_fov>1.5</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>2000</far>
-            </clip>
-            <camera_info_topic>camera_3/info</camera_info_topic>
-          </camera>
-          <always_on>1</always_on>
-          <update_rate>30</update_rate>
-          <visualize>true</visualize>
-          <topic>camera_3/image</topic>
-        </sensor>
-      </link>
-    </model>
+      <model name="camera_3">
+        <pose>137.0 161.0 22.0 0 0.0 -0.6</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_3" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_3/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_3/image</topic>
+          </sensor>
+        </link>
+      </model>
+        <model name="camera_4">
+        <pose> 24 24.0 30.0 0 0.5 3.1</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_4" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_4/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_4/image</topic>
+          </sensor>
+        </link>
+      </model>
+
+      <model name="camera_5">
+        <pose>56 35 30.0 0 0.0 2.75</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_5" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_5/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_5/image</topic>
+          </sensor>
+        </link>
+      </model>
+
+      <model name="camera_6">
+        <pose>102 72 31.0 0 0.0 2.75</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_6" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_6/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_6/image</topic>
+          </sensor>
+        </link>
+      </model>
+
+      <model name="camera_7">
+        <pose>183 126 30.0 0 0.0 2.35</pose>
+        <static>1</static>
+        <link name="link">
+          <pose>0.1 0.05 0.05 0 0 0</pose>
+          <inertial>
+            <mass>0.1</mass>
+            <inertia>
+              <ixx>0.000166667</ixx>
+              <iyy>0.000166667</iyy>
+              <izz>0.000166667</izz>
+            </inertia>
+          </inertial>
+          <visual name="visual">
+            <geometry>
+              <box>
+                <size>0.2 0.1 0.1</size>
+              </box>
+            </geometry>
+            <material>
+              <ambient>0.5, 0, 0, 0</ambient>
+              <diffuse>1.0, 0, 0, 0</diffuse>
+              <emissive>1 1 1 1</emissive>
+            </material>
+          </visual>
+          <sensor name="camera_7" type="boundingbox_camera">
+            <camera>
+              <horizontal_fov>1.5</horizontal_fov>
+              <image>
+                <width>640</width>
+                <height>480</height>
+              </image>
+              <clip>
+                <near>0.1</near>
+                <far>500</far>
+              </clip>
+              <camera_info_topic>camera_7/info</camera_info_topic>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>5</update_rate>
+            <visualize>true</visualize>
+            <topic>camera_7/image</topic>
+          </sensor>
+        </link>
+      </model> 
 
     <include>
       <name>walker_fast_green</name>
@@ -350,7 +525,7 @@
     <include>
       <uri>model://x500_static</uri>
       <name>spoofer</name>
-      <pose>0 0 10 0 0 0</pose>
+      <pose>0 0 6 0 0 0</pose>
     </include>
 
     <include>

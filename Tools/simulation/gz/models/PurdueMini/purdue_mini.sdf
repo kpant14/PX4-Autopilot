@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="purdue">
+    <pose>0 0 0 0 0 0</pose>
+    <static>true</static>
+
+    <link name="buildings">
+      <visual name="visual">
+        <geometry>
+          <mesh><uri>model://PurdueMini/media/purdue_mini.dae</uri></mesh>
+        </geometry>
+        <pose>0 0 0 0 0 0</pose>
+      </visual>
+      <!-- <collision name="collision">
+        <geometry>
+          <mesh><uri>model://PurdueMini/media/purdue_mini.dae</uri></mesh>
+        </geometry>
+        <pose>0 0 0 0 0 0</pose>
+      </collision> -->
+    </link>
+
+  </model>
+</sdf>

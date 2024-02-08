@@ -233,27 +233,27 @@
       </sensor>
       <sensor name="navsat_sensor" type="navsat_multipath">
         <always_on>1</always_on>
-        <update_rate>10</update_rate>
+        <update_rate>13</update_rate>
         <navsat_multipath>
           <position_sensing>
             <horizontal>
               <noise type="gaussian">
                 <mean>0</mean>
-                <stddev>0.000005</stddev>
+                <stddev>0.000001</stddev>
                 <bias_mean>0</bias_mean>
                 <bias_stddev>0</bias_stddev>
-                <!-- <dynamic_bias_stddev>1.0</dynamic_bias_stddev>
-                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time> -->
+                <dynamic_bias_stddev>1.0</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time>
               </noise>
             </horizontal>
             <vertical>
               <noise type="gaussian">
                 <mean>0</mean>
-                <stddev>0.00001</stddev>
+                <stddev>0.000001</stddev>
                 <bias_mean>0</bias_mean>
                 <bias_stddev>0</bias_stddev>
-                <!-- <dynamic_bias_stddev>2.0</dynamic_bias_stddev>
-                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time> -->
+                <dynamic_bias_stddev>1.0</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time>
               </noise>
             </vertical>
           </position_sensing>
@@ -262,14 +262,12 @@
               <noise type="gaussian">
                 <mean>0</mean>
                 <stddev>0.1</stddev>
-                <!-- <precision>0.01</precision> -->
               </noise>
             </horizontal>
             <vertical>
               <noise type="gaussian">
                 <mean>0</mean>
                 <stddev>0.1</stddev>
-                <!-- <precision>0.01</precision> -->
               </noise>
             </vertical>
           </velocity_sensing>
@@ -298,10 +296,14 @@
           </mesh>
         </geometry>
         <material>
-          <script>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 1 0 1</emissive>
+          <!-- <script>
             <name>Gazebo/DarkGrey</name>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-          </script>
+          </script> -->
         </material>
       </visual>
       <visual name="rotor_0_visual_motor_bell">
@@ -370,10 +372,14 @@
           </mesh>
         </geometry>
         <material>
-          <script>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 1 0 1</emissive>
+          <!-- <script>
             <name>Gazebo/DarkGrey</name>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-          </script>
+          </script> -->
         </material>
       </visual>
       <visual name="rotor_1_visual_motor_top">
@@ -442,10 +448,14 @@
           </mesh>
         </geometry>
         <material>
-          <script>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 1 0 1</emissive>
+          <!-- <script>
             <name>Gazebo/DarkGrey</name>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-          </script>
+          </script> -->
         </material>
       </visual>
       <visual name="rotor_2_visual_motor_top">
@@ -514,10 +524,14 @@
           </mesh>
         </geometry>
         <material>
-          <script>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 1 0 1</emissive>
+          <!-- <script>
             <name>Gazebo/DarkGrey</name>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-          </script>
+          </script> -->
         </material>
       </visual>
       <visual name="rotor_3_visual_motor_top">
@@ -628,5 +642,17 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
+     <plugin filename="ignition-gazebo-label-system" name="ignition::gazebo::systems::Label">
+        <label>10</label>
+      </plugin>
+     <include merge='true'>
+      <uri>model://OakD-Lite</uri>
+      <pose>.12 .03 0 0 0 0</pose>
+    </include>
+    <joint name="CameraJoint" type="fixed">
+      <parent>base_link</parent>
+      <child>OakD-Lite/base_link</child>
+      <pose relative_to="base_link">.12 .03 0 0 0 0</pose>
+    </joint>
   </model>
 </sdf>
