@@ -145,11 +145,19 @@
               <camera_info_topic>camera_0/info</camera_info_topic>
             </camera>
             <always_on>1</always_on>
-            <update_rate>5</update_rate>
+            <update_rate>30</update_rate>
             <visualize>true</visualize>
             <topic>camera_0/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
 
       <model name="camera_1">
@@ -196,6 +204,15 @@
             <topic>camera_1/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
+
       </model>
 
       <model name="camera_2">
@@ -242,6 +259,14 @@
             <topic>camera_2/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
 
       <model name="camera_3">
@@ -288,6 +313,14 @@
             <topic>camera_3/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
         <model name="camera_4">
         <pose> 24 24.0 30.0 0 0.5 3.1</pose>
@@ -320,11 +353,19 @@
               <camera_info_topic>camera_4/info</camera_info_topic>
             </camera>
             <always_on>1</always_on>
-            <update_rate>5</update_rate>
+            <update_rate>30</update_rate>
             <visualize>true</visualize>
             <topic>camera_4/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
 
       <model name="camera_5">
@@ -371,6 +412,14 @@
             <topic>camera_5/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
 
       <model name="camera_6">
@@ -417,6 +466,14 @@
             <topic>camera_6/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model>
 
       <model name="camera_7">
@@ -463,6 +520,14 @@
             <topic>camera_7/image</topic>
           </sensor>
         </link>
+        <plugin
+          filename="gz-sim-pose-publisher-system"
+          name="gz::sim::systems::PosePublisher">
+          <publish_link_pose>false</publish_link_pose>
+          <publish_collision_pose>false</publish_collision_pose>
+          <publish_visual_pose>false</publish_visual_pose>
+          <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
       </model> 
 
     <include>
@@ -528,11 +593,11 @@
       <pose>0 0 6 0 0 0</pose>
     </include>
 
-    <include>
+    <!-- <include>
       <uri>model://ambulance</uri>
       <name>ambulance</name>
       <pose>5 5 0 0 0 2.3*0.707</pose>
-    </include>
+    </include> -->
 
     <!-- <include>
       <uri>model://suv</uri>

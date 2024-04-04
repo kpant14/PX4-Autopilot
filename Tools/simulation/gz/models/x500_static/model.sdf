@@ -233,8 +233,8 @@
       </sensor>
       <sensor name="navsat_sensor" type="navsat_multipath">
         <always_on>1</always_on>
-        <update_rate>10</update_rate>
-        <navsat_multipath>
+        <update_rate>13</update_rate>
+        <!-- <navsat_multipath>
           <position_sensing>
             <horizontal>
               <noise type="gaussian">
@@ -242,8 +242,8 @@
                 <stddev>0.000005</stddev>
                 <bias_mean>0</bias_mean>
                 <bias_stddev>0</bias_stddev>
-                <!-- <dynamic_bias_stddev>1.0</dynamic_bias_stddev>
-                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time> -->
+                <dynamic_bias_stddev>1.0</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time>
               </noise>
             </horizontal>
             <vertical>
@@ -252,8 +252,8 @@
                 <stddev>0.00001</stddev>
                 <bias_mean>0</bias_mean>
                 <bias_stddev>0</bias_stddev>
-                <!-- <dynamic_bias_stddev>2.0</dynamic_bias_stddev>
-                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time> -->
+                <dynamic_bias_stddev>2.0</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>3600</dynamic_bias_correlation_time>
               </noise>
             </vertical>
           </position_sensing>
@@ -273,7 +273,7 @@
               </noise>
             </vertical>
           </velocity_sensing>
-        </navsat_multipath>
+        </navsat_multipath> -->
       </sensor>
     </link>
     <link name="rotor_0">
